@@ -7,13 +7,11 @@ import java.util.Scanner;
 
 public class Main {
     private static Connection conexionBBDD;
-    private static final String urlBBDD = "jdbc:mysql://localhost:3306/adat7";
-    private static final String usuario = "dam2";
-    private static final String password = "asdf.1234";
     private static int opcion;
-
+    private static final String urlSQLite = "jdbc:sqlite:./databases/alumnosSQLite.db";
+    private static final String urlH2 = "jdbc:h2:./databases/alumnosH2.db";
     public static void main(String[] args) {
-        conexionBBDD = obtenerConexionBBDD(urlBBDD, usuario, password);
+        conexionBBDD = obtenerConexionBBDD();
         GestorConcesionario.inicializarBBDD(conexionBBDD);
         opcion = 0;
         boolean salir = false;
@@ -25,9 +23,27 @@ public class Main {
         }
     }
 
-    private static Connection obtenerConexionBBDD(String url, String usuario, String password) {
+    private static Connection obtenerConexionBBDD() {
+        Connection conexion = null;
+        System.out.println("""
+            ¿Que base de datos desea utilizar?\
+            
+            1) Base de datos SQLite\
+            
+            2) Base de datos H2\
+            """);
+        opcion = pedirOpcionMenu(2);
+        if (opcion == 1) {
+            conexion = getConexion(urlSQLite);
+        } else {
+            conexion = getConexion(urlH2);
+        }
+        return conexion;
+    }
+
+    private static Connection getConexion(String url) {
         try {
-            Connection conexion = DriverManager.getConnection(url, usuario, password);
+            Connection conexion = DriverManager.getConnection(url);
             return conexion;
         } catch (SQLException e) {
             System.out.println("Error al iniciar conexion con la base de datos");

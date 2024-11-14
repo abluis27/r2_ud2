@@ -1,3 +1,5 @@
+package apartado5;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,7 +14,7 @@ import java.util.Scanner;
 public class Main {
     private static Connection conexionBBDD;
     private static int opcion;
-    private static String urlPorDefecto = "./concesionario.db";
+    private static String rutaPorDefecto = "jdbc:sqlite:./concesionario.db";
 
     public static void main(String[] args) {
         conexionBBDD = obtenerConexionBBDD();
@@ -29,8 +31,8 @@ public class Main {
 
     private static Connection obtenerConexionBBDD() {
         try {
-            String url = "jdbc:sqlite:" + obtenerRutaBBDD();
-            Connection conexion = DriverManager.getConnection(url);
+            String ruta = obtenerRutaBBDD();
+            Connection conexion = DriverManager.getConnection(ruta);
             return conexion;
         } catch (SQLException e) {
             System.out.println("Error al iniciar conexion con la base de datos");
@@ -42,13 +44,15 @@ public class Main {
         Properties properties = new Properties();
         try(FileInputStream inputStream = new FileInputStream("database.ini")) {
            properties.load(inputStream);
-           return properties.getProperty("url");
+           String tipo = properties.getProperty("tipo");
+           String ruta = properties.getProperty("url");
+           return "jdbc:" + tipo + ":" + ruta;
         } catch (FileNotFoundException e) {
             System.out.println("Error al leer el fichero ini. Se creará una base de datos en el directorio actual");
-            return urlPorDefecto;
+            return rutaPorDefecto;
         } catch (IOException e) {
             System.out.println("Error al leer el fichero ini. Se creará una base de datos en el directorio actual");
-            return urlPorDefecto;
+            return rutaPorDefecto;
         }
     }
     private static void mostrarMenuPrincial() {

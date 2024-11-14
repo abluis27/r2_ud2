@@ -1,3 +1,5 @@
+package apartado5;
+
 public class Coche {
     private String matricula;
     private String marca;

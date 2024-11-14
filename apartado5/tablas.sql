@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS coches (
+    matricula VARCHAR(10) PRIMARY KEY,
+    marca VARCHAR(50) NOT NULL,
+    modelo VARCHAR(50) NOT NULL,
+    año YEAR NOT NULL
+);

@@ -12,7 +12,8 @@ import java.util.Scanner;
 public class Main {
     private static Connection conexionBBDD;
     private static int opcion;
-private static String urlPorDefecto = "./databases/concesionario.db";
+    private static String urlPorDefecto = "./concesionario.db";
+
     public static void main(String[] args) {
         conexionBBDD = obtenerConexionBBDD();
         GestorConcesionario.inicializarBBDD(conexionBBDD);
@@ -36,17 +37,17 @@ private static String urlPorDefecto = "./databases/concesionario.db";
             return null;
         }
     }
+
     private static String obtenerRutaBBDD() {
         Properties properties = new Properties();
         try(FileInputStream inputStream = new FileInputStream("database.ini")) {
            properties.load(inputStream);
-           String url = properties.getProperty("url");
-           return url;
+           return properties.getProperty("url");
         } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error al leer el fichero ini. Se creará una base de datos en el directorio actual");
             return urlPorDefecto;
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error al leer el fichero ini. Se creará una base de datos en el directorio actual");
             return urlPorDefecto;
         }
     }

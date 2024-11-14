@@ -1,15 +1,18 @@
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.Properties;
 import java.util.Scanner;
 
 public class Main {
     private static Connection conexionBBDD;
     private static int opcion;
-    private static final String urlSQLite = "jdbc:sqlite:./databases/alumnosSQLite.db";
-    private static final String urlH2 = "jdbc:h2:./databases/alumnosH2.db";
+private static String urlPorDefecto = "./databases/concesionario.db";
     public static void main(String[] args) {
         conexionBBDD = obtenerConexionBBDD();
         GestorConcesionario.inicializarBBDD(conexionBBDD);
@@ -24,25 +27,8 @@ public class Main {
     }
 
     private static Connection obtenerConexionBBDD() {
-        Connection conexion = null;
-        System.out.println("""
-            ¿Que base de datos desea utilizar?\
-            
-            1) Base de datos SQLite\
-            
-            2) Base de datos H2\
-            """);
-        opcion = pedirOpcionMenu(2);
-        if (opcion == 1) {
-            conexion = getConexion(urlSQLite);
-        } else {
-            conexion = getConexion(urlH2);
-        }
-        return conexion;
-    }
-
-    private static Connection getConexion(String url) {
         try {
+            String url = "jdbc:sqlite:" + obtenerRutaBBDD();
             Connection conexion = DriverManager.getConnection(url);
             return conexion;
         } catch (SQLException e) {
@@ -50,7 +36,20 @@ public class Main {
             return null;
         }
     }
-
+    private static String obtenerRutaBBDD() {
+        Properties properties = new Properties();
+        try(FileInputStream inputStream = new FileInputStream("database.ini")) {
+           properties.load(inputStream);
+           String url = properties.getProperty("url");
+           return url;
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+            return urlPorDefecto;
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return urlPorDefecto;
+        }
+    }
     private static void mostrarMenuPrincial() {
         System.out.println("+-----------------------------------------------------------+");
         System.out.println("|                 GESTOR BBDD CONCESIONARIO                 |");
@@ -187,3 +186,5 @@ public class Main {
         return GestorConcesionario.obtenerCoche(conexionBBDD, matricula) != null;
     }
 }
+
+

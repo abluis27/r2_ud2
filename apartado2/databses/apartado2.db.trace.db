@@ -1,0 +1,8 @@
+2024-11-14 08:49:55 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Tabla "CONTADORES" no encontrada
+Table "CONTADORES" not found; SQL statement:
+update contadores set cuenta=? where nombre='contador1' [42102-197]
+2024-11-14 08:54:19 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Error de Sintaxis en sentencia SQL "INSERT IN[*] CONTADORES VALUES ('contador1',1000); "; se esperaba "INTO"
+Syntax error in SQL statement "INSERT IN[*] CONTADORES VALUES ('contador1',1000); "; expected "INTO"; SQL statement:
+insert in contadores values ('contador1',1000); [42001-197]

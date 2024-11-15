@@ -48,10 +48,12 @@ public class Main {
            String ruta = properties.getProperty("url");
            return "jdbc:" + tipo + ":" + ruta;
         } catch (FileNotFoundException e) {
-            System.out.println("Error al leer el fichero ini. Se creará una base de datos en el directorio actual");
+            System.out.println("Error al leer el fichero ini. " +
+                    "Se creará una base de datos en el directorio actual");
             return rutaPorDefecto;
         } catch (IOException e) {
-            System.out.println("Error al leer el fichero ini. Se creará una base de datos en el directorio actual");
+            System.out.println("Error al leer el fichero ini. " +
+                    "Se creará una base de datos en el directorio actual");
             return rutaPorDefecto;
         }
     }
